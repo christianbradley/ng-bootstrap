@@ -1,10 +1,20 @@
 {
   "name": "itrain-angular",
-	"private": true,
-	"description": "Angular version of the iTrain application",
+  "private": true,
+  "description": "Angular version of the iTrain application",
   "version": "0.0.0",
   "devDependencies": {
     "grunt-cli": "~0.1.9",
-    "bower": "~1.1.1"
+    "bower": "~1.1.1",
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.0",
+    "karma-requirejs": "~0.1.0",
+    "karma-coffee-preprocessor": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "karma": "~0.10.1",
+    "phantomjs": "~1.9.1-0"
   }
 }
