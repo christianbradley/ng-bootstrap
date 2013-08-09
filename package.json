@@ -1,0 +1,9 @@
+{
+  "name": "itrain-angular",
+	"description": "Angular version of the iTrain application",
+  "version": "0.0.0",
+  "devDependencies": {
+    "grunt-cli": "~0.1.9",
+    "bower": "~1.1.1"
+  }
+}
