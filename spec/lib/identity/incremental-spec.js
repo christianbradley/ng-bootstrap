@@ -1,17 +1,34 @@
 define(["identity/incremental"], function(Identity) {
 
-	describe("Incremental Identity", function() {
+ describe("Incremental Identity", function() {
 
-		var subject = new Identity();
+    describe("with defaults", function() {
+      var subject = new Identity();
 
-		it("generates an incremental identity", function() {
-			var a = subject.generate();
-			var b = subject.generate();
+      it("starts at 0", function() {
+        expect(subject.generate()).toBe(0);
+      });
 
-			expect(a).toBe(0);
-			expect(b).toBe(1);
-		});
+      it("increments by 1", function() {
+        expect(subject.generate()).toBe(1);
+      });
 
-	});
+    });
+
+    describe("configured", function() {
+      var config = { start: 1000, step: 50 };
+      var subject = new Identity(config);
+
+      it("starts at the provided index", function() {
+        expect(subject.generate()).toBe(config.start);
+      });
+
+      it("increments by the provided number", function() {
+        expect(subject.generate()).toBe( config.step + config.start );
+      });
+
+    });
+
+  });
 
 });
