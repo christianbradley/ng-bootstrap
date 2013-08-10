@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Fri Aug 09 2013 17:20:21 GMT-0500 (CDT)
+// Generated on Fri Aug 09 2013 18:20:01 GMT-0500 (CDT)
 
 module.exports = function(config) {
   config.set({
@@ -9,25 +9,20 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'app/scripts/**/*.js',
-      'spec/**/*-spec.js'
+      {pattern: 'app/scripts/**/*.js', included: false},
+      {pattern: 'spec/**/*-spec.js', included: false},
+			'spec/require.config.js'
     ],
 
 
     // list of files to exclude
-    exclude: [
-      
-    ],
+    exclude: ['app/scripts/main.js'],
 
-		plugins: [
-			'karma-jasmine',
-			'karma-phantomjs-launcher'
-		],
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
@@ -63,11 +58,18 @@ module.exports = function(config) {
 
 
     // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
+    captureTimeout: 15000,
 
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
+
+		plugins: [
+			'karma-jasmine',
+			'karma-requirejs',
+			'karma-phantomjs-launcher',
+			'karma-chrome-launcher'
+		]
   });
 };
