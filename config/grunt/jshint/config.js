@@ -1,10 +1,32 @@
 "use strict";
 
-module.exports = {
+module.exports = function(files) {
 
-  options: require("./default-options.js"),
-  scripts: require("./scripts.js"),
-  specs: require("./specs.js"),
-  browser: require("./browser.js")
+  return {
+    options: require("./default-options.js"),
+
+    scripts: {
+      options: { node: true },
+      files: { src: files.scripts() }
+    },
+
+    specs: {
+      options: {
+        browser: true,
+        globals: { require: true, define: true, describe: true, it: true, expect: true }
+      },
+      files: { src: files.specs() }
+    },
+
+
+    browser: {
+      options: {
+        browser: true,
+        globals: { require: true, define: true }
+      },
+      files: { src: files.browser() }
+    }
+
+  };
 
 };
