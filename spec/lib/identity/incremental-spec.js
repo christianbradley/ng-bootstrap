@@ -1,6 +1,7 @@
 define(["identity/incremental"], function(Identity) {
+  "use strict";
 
- describe("Incremental Identity", function() {
+  describe("Incremental Identity", function() {
 
     describe("with defaults", function() {
       var subject = new Identity();
