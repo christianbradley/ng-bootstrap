@@ -1,7 +1,10 @@
-var options = {
+"use strict";
+
+module.exports = {
 
   // Globals for requirejs
   globals: ['require', 'define'],
+  ignores: ['node_modules/**', 'app/components/**'],
 
   // Enforcing Options: False allows exception
   bitwise: false,
@@ -72,5 +75,3 @@ var options = {
   white: false
 
 };
-
-module.exports = options;
