@@ -5,6 +5,11 @@ var options = require("./jshint.options.js");
 var config = {
   options: options,
 
+  json: {
+    options: { strict: false },
+    files: { src: ['./*.json', 'config/**/*.json'] }
+  },
+
   specs: {
     options: {
       browser: true,
