@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    jshint: require("./config/grunt/jshint.config.js")
+    jshint: require("./config/grunt/jshint/config.js")
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
