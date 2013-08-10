@@ -9,7 +9,7 @@ define(["require"], function(require) {
 			var generated = index;
 			index += step;
 			return generated;
-		}
+		};
 	}
 
 	return IncrementalIdentity;
