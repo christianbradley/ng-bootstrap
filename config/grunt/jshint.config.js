@@ -1,13 +1,22 @@
 "use strict";
 
 var options = require("./jshint.options.js");
+options.ignores = ['node_modules/**', 'app/components/**'];
 
 var config = {
   options: options,
 
   json: {
     options: { strict: false },
-    files: { src: ['./*.json', 'config/**/*.json'] }
+    files: { src: ["**/*.json"] },
+  },
+
+  scripts: {
+    options: {
+      node: true,
+      ignores: ['node_modules/**', 'app/components/**', 'spec/**', 'app/scripts/**']
+    },
+    files: { src: ['**/*.js'] }
   },
 
   specs: {
@@ -26,17 +35,12 @@ var config = {
     files: { src: ['spec/**/*.js'] }
   },
 
-  scripts: {
+  browser: {
     options: {
       browser: true,
       globals: { require: true, define: true }
     },
     files: { src: ['app/scripts/**/*.js'] }
-  },
-
-  config: {
-    options: { node: true },
-    files: { src: ['*.js', 'config/**/*.js'] }
   }
 
 };
