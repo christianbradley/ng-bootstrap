@@ -3,14 +3,18 @@
 function ProjectFiles() {
   var self = this;
   var glob = require("glob");
+  var path = require("path");
   var files = {};
 
   function isProjectFile(path) {
-    return !(path.match("node_modules") || path.match("app/components"));
+    return !path.match("vendor");
   }
 
   function filesOfType(type) {
-    return glob.sync("**/*." + type).filter(isProjectFile);
+    var root = path.resolve(__dirname);
+    var locals = glob.sync(root + "/*." + type);
+    var recurse = glob.sync(root + "/!(node_modules|bower_components)/**/*." + type);
+    return locals.concat(recurse).filter(isProjectFile);
   }
 
   function inAppScriptsDir(path) { return path.match("app/scripts/"); }
