@@ -8,11 +8,11 @@ module.exports = function(grunt) {
 
   // JsHint:
   config.jshint = {
-    options: require("./config/grunt/jshint/default-options.js")
+    options: grunt.file.readJSON('config/jshint/jshint.config.json')
   };
 
   // JsHint: Configuration
-  config.jshint.configScripts = {
+  config.jshint.configs = {
     options: { node: true },
     files: { src: ["*.js", "config/**/*.js"] }
   };
