@@ -1,16 +1,27 @@
+// jshint camelcase: false
 (function($require, $karma) {
+  "use strict";
 
-	var specs = [];
+  function isSpec(file) {
+    return (/-spec\.js$/).test(file);
+  }
 
-	for(var file in $karma.files) {
-		var isSpec = /\-spec\.js$/.test(file);
-		if(isSpec) { specs.push(file); }
-	}
+  function getSpecs(files) {
+    var file, specs = [];
 
-	$require.config({
-		baseUrl: "/base/app/scripts/lib",
-		deps: specs,
-		callback: $karma.start
-	});
+    for(file in files) {
+      if(files.hasOwnProperty(file) && isSpec(file)) {
+        specs.push(file);
+      }
+    }
+
+    return specs;
+  }
+
+  $require.config({
+    baseUrl: "/base/app/scripts/lib",
+    deps: getSpecs($karma.files),
+    callback: $karma.start
+  });
 
 }(require, window.__karma__));

@@ -1,4 +1,5 @@
-define(["require"], function(require) {
+define(function() {
+  "use strict";
 
 	function IncrementalIdentity(config) {
 		config = typeof config === "object" ? config : {};
@@ -9,7 +10,7 @@ define(["require"], function(require) {
 			var generated = index;
 			index += step;
 			return generated;
-		}
+		};
 	}
 
 	return IncrementalIdentity;
