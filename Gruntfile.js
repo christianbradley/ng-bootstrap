@@ -57,64 +57,6 @@ module.exports = function(grunt) {
     }
   };
 
-  config.exec = {
-    options: {
-      stdout: true,
-      stderr: true,
-    },
-
-    startHotfix: {
-      cmd: function(name) { return "git flow hotfix start " + name; }
-    },
-
-    finishHotfix: {
-      cmd: function(name) { return "git flow hotfix finish " + name; }
-    },
-
-    finishCurrentHotfix: {
-      cmd: function() { return currentBranchCommand("git flow hotfix finish"); }
-    },
-
-    startFeature: {
-      cmd: function(name) { return "git flow feature start " + name; }
-    },
-
-    finishFeature: {
-      cmd: function(name) { return "git flow feature finish " + name; }
-    },
-
-    finishCurrentFeature: {
-      cmd: function() { return currentBranchCommand("git flow feature finish"); }
-    },
-
-    pullFeature: {
-      cmd: function(remote, name) { return "git flow feature pull " + remote + " " + name; }
-    },
-
-    publishFeature: {
-      cmd: function(name) { return "git flow feature publish " + name; }
-    },
-
-    publishCurrentFeature: {
-      cmd: function() { return currentBranchCommand("git flow feature publish"); },
-    },
-
-    startRelease: {
-      cmd: function(version) { return "git flow release start " + version; }
-    },
-
-    finishRelease: {
-      cmd: function(name) { return "git flow release finish " + name; }
-    },
-
-    finishCurrentRelease: {
-      cmd: function() { return currentBranchCommand("git flow release finish"); },
-    },
-
-    flow: {}
-
-  };
-
   grunt.initConfig(config);
 
   grunt.loadTasks('tasks');
