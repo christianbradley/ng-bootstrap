@@ -51,7 +51,7 @@ module.exports = function(grunt) {
    */
   function flowCurrent(command) {
     return [
-      "git rev-parse --abrev-ref HEAD",
+      "git rev-parse --abbrev-ref HEAD",
       "awk -F'/' '{print $2}'",
       "xargs " + flow(command)
     ].join(" | ");
