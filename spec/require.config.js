@@ -2,24 +2,26 @@
 (function($require, $karma) {
   "use strict";
 
-  function getSpecs(files) {
-    var i, len, file;
-    var matcher = /\-spec\.js$/;
-    var matches = [];
-
-    for(i = 0, len = files.length; i < len; i++) {
-      file = files[i];
-      if(matcher.test(file)) { matches.push(file); }
-    }
-
-    return matches;
+  function isSpec(file) {
+    return (/-spec\.js$/).test(file);
   }
 
+  function getSpecs(files) {
+    var file, specs = [];
 
-	$require.config({
-		baseUrl: "/base/app/scripts/lib",
-		deps: getSpecs($karma.files),
-		callback: $karma.start
-	});
+    for(file in files) {
+      if(files.hasOwnProperty(file) && isSpec(file)) {
+        specs.push(file);
+      }
+    }
+
+    return specs;
+  }
+
+  $require.config({
+    baseUrl: "/base/app/scripts/lib",
+    deps: getSpecs($karma.files),
+    callback: $karma.start
+  });
 
 }(require, window.__karma__));

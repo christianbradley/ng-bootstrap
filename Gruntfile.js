@@ -1,9 +1,14 @@
 module.exports = function(grunt) {
   "use strict";
 
-  var config = { pkg: grunt.file.readJSON('package.json') };
+  var config = {};
 
+  config.pkg = grunt.file.readJSON('package.json');
+
+  // HTML Lint
   config.htmllint = { src: ["app/**/*.{htm,html}"] };
+
+  // JSONLint
   config.jsonlint = { src: ["*.json", "config/**/*.json", "spec/**/*.json", "app/**/*.json" ] };
 
   // JsHint:
@@ -35,13 +40,24 @@ module.exports = function(grunt) {
     }
   };
 
+  // Karma Tests
+  config.karma = {
+    continuous: {
+      configFile: 'config/karma/karma.config.js',
+      singleRun: true,
+      browsers: ['PhantomJS']
+    }
+  };
+
   grunt.initConfig(config);
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsonlint');
   grunt.loadNpmTasks('grunt-html');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('build', ['jshint', 'jsonlint', 'htmllint']);
+  grunt.registerTask('build', ['jshint', 'jsonlint', 'htmllint', 'karma']);
+  grunt.registerTask('test', ['karma']);
   grunt.registerTask('default', ['build']);
 };
 
