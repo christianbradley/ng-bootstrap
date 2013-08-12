@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     files: { src: ["*.js", "config/**/*.js"] }
   };
 
-  // JsHint:
+  // JsHint: Specs
   config.jshint.specs = {
     files: { src: "spec/**/*.js" },
     options: {
