@@ -79,7 +79,9 @@ module.exports = function(grunt) {
 
     // Finish a {feature|hotfix|release} by name
     grunt.registerTask(["flow", target, "finish"].join(":"), function(name) {
+      this.requires("build");
       var command = flow(target + " finish " + name);
+
       if(name) { 
         execute(command, this.async());
       } else {
@@ -90,6 +92,7 @@ module.exports = function(grunt) {
 
     // Finish the current {feature|hotfix|release} 
     grunt.registerTask(["flow", target, "current", "finish"].join(":"), function() {
+      this.requires("build");
       var command = flowCurrent(target + " finish");
       execute(command, this.async());
     });
@@ -105,6 +108,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask(["flow", target, "publish"].join(":"), function(name) {
       var command = flow(target + " publish " + name);
+
       if(name) { 
         execute(command, this.async());
       } else {
