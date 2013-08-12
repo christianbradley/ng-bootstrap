@@ -6,7 +6,7 @@ module.exports = function(grunt) {
   config.pkg = grunt.file.readJSON('package.json');
 
   // HTML Lint
-  config.htmllint = { src: ["app/**/*.{htm,html}"] };
+  config.htmlhint = { src: ["app/**/*.{htm,html}"] };
 
   // JSONLint
   config.jsonlint = { src: ["*.json", "config/**/*.json", "spec/**/*.json", "app/**/*.json" ] };
@@ -53,10 +53,10 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsonlint');
-  grunt.loadNpmTasks('grunt-html');
+  grunt.loadNpmTasks('grunt-htmlhint');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('build', ['jshint', 'jsonlint', 'htmllint', 'karma']);
+  grunt.registerTask('build', ['jshint', 'jsonlint', 'htmlhint', 'karma']);
   grunt.registerTask('test', ['karma']);
   grunt.registerTask('default', ['build']);
 };
