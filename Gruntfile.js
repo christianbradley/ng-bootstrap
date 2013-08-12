@@ -49,12 +49,21 @@ module.exports = function(grunt) {
     }
   };
 
+  // Connect Server
+  config.connect = {
+    server: {
+      port: 8000,
+      base: './app'
+    }
+  };
+
   grunt.initConfig(config);
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsonlint');
   grunt.loadNpmTasks('grunt-htmlhint');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-connect');
 
   grunt.registerTask('build', ['jshint', 'jsonlint', 'htmlhint', 'karma']);
   grunt.registerTask('test', ['karma']);
