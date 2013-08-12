@@ -2,10 +2,12 @@
 // Generated on Fri Aug 09 2013 18:20:01 GMT-0500 (CDT)
 
 module.exports = function(config) {
+  "use strict";
+
   config.set({
 
     // base path, that will be used to resolve files and exclude
-    basePath: '',
+    basePath: '../../',
 
 
     // frameworks to use
@@ -14,14 +16,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      {pattern: 'app/scripts/**/*.js', included: false},
+      {pattern: 'app/scripts/lib/**/*.js', included: false},
       {pattern: 'spec/**/*-spec.js', included: false},
 			'spec/require.config.js'
     ],
 
 
     // list of files to exclude
-    exclude: ['app/scripts/main.js'],
+    exclude: [],
 
 
     // test results reporter to use
@@ -39,7 +41,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
