@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
 
   var cp = require("child_process"),
+    semver = require('semver'),
     f = require('util').format,
     log = grunt.log,
     verbose = grunt.verbose,
@@ -39,7 +40,7 @@ module.exports = function(grunt) {
    * @param {...string} args - additional arguments for git flow
    * @returns {string} A git flow command
    */
-  function flow(command) { 
+  function flow(command) {
     return "git flow " + command;
   }
 
@@ -69,7 +70,7 @@ module.exports = function(grunt) {
     grunt.registerTask(["flow", target, "start"].join(":"), function(name) {
       var done = this.async();
       var command = flow(target + " start " + name);
-      if(name) { 
+      if(name) {
         execute(command, this.async());
       } else {
         log.error("No name/version specified");
@@ -82,7 +83,7 @@ module.exports = function(grunt) {
       this.requires("build");
       var command = flow(target + " finish " + name);
 
-      if(name) { 
+      if(name) {
         execute(command, this.async());
       } else {
         log.error("No name/version specified");
@@ -90,7 +91,7 @@ module.exports = function(grunt) {
       }
     });
 
-    // Finish the current {feature|hotfix|release} 
+    // Finish the current {feature|hotfix|release}
     grunt.registerTask(["flow", target, "current", "finish"].join(":"), function() {
       this.requires("build");
       var command = flowCurrent(target + " finish");
@@ -98,6 +99,30 @@ module.exports = function(grunt) {
     });
 
   });
+
+  function startBumpRelease(bumpType) {
+    return function() {
+      this.requiresConfig('pkg.version');
+      var version = grunt.config.get('pkg.version');
+
+      if(!semver.valid(version)) {
+        log.error("Invalid version in package: " + version);
+        return false;
+      }
+
+      var bumped = semver.inc(version, bumpType);
+      var command = flow("release start v" + bumped);
+
+      execute(command, function(success) {
+        if(!success) { return false; }
+        grunt.task.run("bump:" + bumpType);
+      });
+    };
+  }
+
+  grunt.registerTask("flow:release:patch:start", startBumpRelease('patch'));
+  grunt.registerTask("flow:release:minor:start", startBumpRelease('minor'));
+  grunt.registerTask("flow:release:major:start", startBumpRelease('major'));
 
   /**
    * Features and Releases each support
@@ -109,7 +134,7 @@ module.exports = function(grunt) {
     grunt.registerTask(["flow", target, "publish"].join(":"), function(name) {
       var command = flow(target + " publish " + name);
 
-      if(name) { 
+      if(name) {
         execute(command, this.async());
       } else {
         log.error("No name/version specified");
@@ -126,7 +151,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("flow:feature:pull", function(name) {
     var command = flow("feature pull" + name);
-    if(name) { 
+    if(name) {
       execute(command, this.async());
     } else {
       log.error("No name/version specified");
