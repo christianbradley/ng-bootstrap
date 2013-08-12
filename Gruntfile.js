@@ -1,14 +1,6 @@
 module.exports = function(grunt) {
   "use strict";
 
-  function currentBranchCommand(cmd) {
-    return [
-      "git rev-parse --abbrev-ref HEAD",
-      "awk -F'/' '{print $2}'",
-      "xargs " + cmd
-    ].join(" | ");
-  }
-
   var config = {};
 
   config.pkg = grunt.file.readJSON('package.json');
@@ -117,11 +109,15 @@ module.exports = function(grunt) {
 
     finishCurrentRelease: {
       cmd: function() { return currentBranchCommand("git flow release finish"); },
-    }
+    },
+
+    flow: {}
 
   };
 
   grunt.initConfig(config);
+
+  grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsonlint');
@@ -129,22 +125,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-connect');
   grunt.loadNpmTasks('grunt-exec');
-
-  grunt.registerTask('feature:start', ['exec:startFeature']);
-  grunt.registerTask('feature:finish', ['build', 'exec:finishFeature']);
-  grunt.registerTask('feature:finish:current', ['build', 'exec:finishCurrentFeature']);
-
-  grunt.registerTask('feature:pull', ['exec:pullFeature']);
-  grunt.registerTask('feature:publish', ['build', 'exec:publishFeature']);
-  grunt.registerTask('feature:publish:current', ['build', 'exec:publishCurrentFeature']);
-
-  grunt.registerTask('hotfix:start', ['exec:startHotfix']);
-  grunt.registerTask('hotfix:finish', ['exec:finishHotfix']);
-  grunt.registerTask('hotfix:finish:current', ['exec:finishCurrentHotfix']);
-
-  grunt.registerTask('release:start', ['exec:startRelease']);
-  grunt.registerTask('release:finish', ['build', 'exec:finishRelease']);
-  grunt.registerTask('release:finish:current', ['build', 'exec:finishCurrentRelease']);
 
   grunt.registerTask('build', ['jshint', 'jsonlint', 'htmlhint', 'karma']);
   grunt.registerTask('test', ['karma']);
