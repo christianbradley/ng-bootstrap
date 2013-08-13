@@ -88,7 +88,9 @@ module.exports = function(grunt) {
   // Rebase current feature on develop
   grunt.registerTask("feature:rebase", "Rebase current feature onto develop", function() {
     var command = flowCurrent("feature rebase -i");
-    exec(command, this.async());
+    grunt.log.warn("Cannot run interactive rebase through grunt.");
+    grunt.log.ok("Execute the following from your terminal:");
+    grunt.log.writeln(command);
   });
 
   // RELEASE
