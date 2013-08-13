@@ -2,31 +2,8 @@ module.exports = function(grunt) {
   "use strict";
 
   var config = {};
-  var cp = require("child_process");
 
   config.pkg = grunt.file.readJSON('package.json');
-
-  // Execute a shell function
-  config.exec = function(command, callback) {
-    var proc;
-
-    proc = cp.exec(command);
-    grunt.log.subhead(command);
-
-    proc.stdout.on('data', function(d) { grunt.log.write(d); });
-    proc.stderr.on('data', function(d) { grunt.log.error(d); });
-
-    proc.on('exit', function(code) {
-      var msg = "Exited with code:" + code;
-      var success = (code === 0);
-      var logger = success ? grunt.log.ok : grunt.log.error;
-
-      logger(msg);
-      return callback(success);
-    });
-
-    return proc;
-  };
 
   // HTML Lint
   config.htmlhint = { src: ["app/**/*.{htm,html}"] };
