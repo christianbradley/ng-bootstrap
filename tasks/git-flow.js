@@ -28,18 +28,18 @@ module.exports = function(grunt) {
       return false;
     }
 
-    var command = flow("feature start -F " + name);
+    var command = ["git fetch", flow("feature start " + name)].join(" && ");
     exec(command, this.async());
   });
 
-  // Finish the current feature
+  // Finish the current feature : TODO
   grunt.registerTask("feature:finish", "Finish the current git flow feature", function() {
     this.requires("build");
     var command = flowCurrent("feature finish -F");
     exec(command, this.async());
   });
 
-  // Publish the current feature
+  // Publish the current feature : TODO
   grunt.registerTask("feature:publish", "Publish the current git flow feature to $ORIGIN", function() {
     this.requires("build");
     var command = flowCurrent("feature publish");
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 
   // Pull a remote feature
   grunt.registerTask("feature:pull", "Pull remote changes made to the current feature", function() {
-    var command = flowCurrent("feature pull " + name);
+    var command = flowCurrent("feature pull");
     exec(command, this.async());
   });
 
