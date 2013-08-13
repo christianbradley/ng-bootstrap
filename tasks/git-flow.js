@@ -104,4 +104,20 @@ module.exports = function(grunt) {
     flow("release track", this.async(), [version]);
   });
 
+  grunt.registerTask("hotfix:list", "List existing hotfixes", function() {
+    var flags = this.options({ flags: null }).flags;
+    flow("hotfix list", this.async(), [flags]);
+  });
+
+  grunt.registerTask("hotfix:start", "Start a new hotfix named <version>, optionally base it on <base> instead of <master>", function(version, base) {
+    var flags = this.options({ flags: null }).flags;
+    flow("hotfix start", this.async(), [flags, version, base]);
+  });
+
+  grunt.registerTask("hotfix:finish", "Finish hotfix <version>", function(version) {
+    this.requires("build");
+    var flags = this.options({ flags: null }).flags;
+    flow("hotfix finish", this.async(), [flags, version]);
+  });
+
 };
