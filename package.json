@@ -2,7 +2,7 @@
   "name": "itrain-angular",
   "private": true,
   "description": "Angular version of the iTrain application",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "devDependencies": {
     "grunt-cli": "~0.1.9",
     "bower": "~1.1.1",
