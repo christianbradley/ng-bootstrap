@@ -45,13 +45,13 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("feature:finish", "Finish feature <name>", function(name) {
-    this.requires("build");
+    this.requires("test");
     var flags = this.options({ flags: null }).flags;
     flow("feature finish", this.async(), [name], flags);
   });
 
   grunt.registerTask("feature:publish", "Start sharing feature <name> on $ORIGIN", function(name) {
-    this.requires("build");
+    this.requires("test");
     flow("feature publish", this.async(), [name]);
   });
 
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
   ["patch", "minor", "major"].forEach(function(bumpType) {
     grunt.registerTask("release:" + bumpType, "Start a new " + bumpType + " release", function() {
       this.requiresConfig("pkg.version");
-      this.requires("build");
+      this.requires("test");
 
       var flags = this.options({ flags: null }).flags;
       var version = semver.inc(grunt.config.get("pkg.version"), bumpType);
@@ -95,13 +95,13 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("release:finish", "Finish release <version>", function(version) {
-    this.requires("build");
+    this.requires("test");
     var flags = this.options({ flags: null }).flags;
     flow("release finish", this.async(), [version], flags);
   });
 
   grunt.registerTask("release:publish", "Start sharing release <version> on $ORIGIN", function(version) {
-    this.requires("build");
+    this.requires("test");
     flow("release publish", this.async(), [version]);
   });
 
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("hotfix:finish", "Finish hotfix <version>", function(version) {
-    this.requires("build");
+    this.requires("test");
     var flags = this.options({ flags: null }).flags;
     flow("hotfix finish", this.async(), [version], flags);
   });
