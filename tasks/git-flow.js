@@ -39,7 +39,7 @@ module.exports = function(grunt) {
     exec(command, this.async());
   });
 
-  // Publish the current feature : TODO
+  // Publish the current feature
   grunt.registerTask("feature:publish", "Publish the current git flow feature to $ORIGIN", function() {
     this.requires("build");
     var command = flowCurrent("feature publish");
