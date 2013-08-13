@@ -102,11 +102,8 @@ module.exports = function(grunt) {
     var bumped = semver.inc(currentVersion, 'patch');
     var command = flow("release start v" + bumped);
 
-    exec(command, function(success) {
-      if(success) {
-        grunt.task.run("bump:patch");
-      } else { return false; }
-    });
+    exec(command, this.async());
+    grunt.task.run("bump:minor");
   });
 
   // Create a new major release
