@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
 
   var cp = require("child_process")
+    , semver = require("semver")
     , Q = require("q")
     , _ = grunt.util._;
 
@@ -68,6 +69,39 @@ module.exports = function(grunt) {
 
   grunt.registerTask("feature:pull", "Pull feature from <remote> with name <name>", function(remote, name) {
     flow("feature pull", this.async(), [remote, name]);
+  });
+
+  grunt.registerTask("release:list", "List existing releases", function() {
+    var flags = this.options({ flags: null }).flags;
+    flow("release list", this.async(), [flags]);
+  });
+
+  ["patch", "minor", "major"].forEach(function(bumpType) {
+    grunt.registerTask("release:" + bumpType, "Start a new " + bumpType + " release", function() {
+      this.requiresConfig("pkg.version");
+      this.requires("build");
+
+      var flags = this.options({ flags: null }).flags;
+      var version = semver.inc(grunt.config.get("pkg.version"), bumpType);
+
+      flow("release start", this.async(), [flags, version]);
+      grunt.task.run("bump:" + bumpType);
+    });
+  });
+
+  grunt.registerTask("release:finish", "Finish release <version>", function(version) {
+    this.requires("build");
+    var flags = this.options({ flags: null }).flags;
+    flow("release finish", this.async(), [flags, version]);
+  });
+
+  grunt.registerTask("release:publish", "Start sharing release <version> on $ORIGIN", function(version) {
+    this.requires("build");
+    flow("release publish", this.async(), [version]);
+  });
+
+  grunt.registerTask("release:track", "Start tracking release <version> that is shared on $ORIGIN", function(version) {
+    flow("release track", this.async(), [version]);
   });
 
 };
