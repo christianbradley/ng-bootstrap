@@ -46,6 +46,13 @@ module.exports = function(grunt) {
     exec(command, this.async());
   });
 
+  // Push the current feature
+  grunt.registerTask("feature:push", "Push changes you made in this feature to $ORIGIN", function() {
+    this.requires("build");
+    var command = "git push origin";
+    exec(command, this.async());
+  });
+
   // Track a feature
   grunt.registerTask("feature:track", "Track a feature that is published to $ORIGIN", function(name) {
     if(typeof name === "undefined") {
