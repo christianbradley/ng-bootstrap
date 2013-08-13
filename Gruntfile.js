@@ -57,6 +57,10 @@ module.exports = function(grunt) {
     }
   };
 
+  config.feature = {
+    rebase: { flags: "-i" } 
+  }
+
   grunt.initConfig(config);
 
   grunt.loadTasks('tasks');
