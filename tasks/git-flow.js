@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     , _ = grunt.util._;
 
   function exec(command, args) {
-    grunt.log.subhead([command, args.join(" ")].join(" "));
+    grunt.log.ok([command, args.join(" ")].join(" "));
 
     var child = cp.spawn(command, args, { env: process.env, stdio: "inherit" });
     var deferred = Q.defer();
@@ -14,8 +14,6 @@ module.exports = function(grunt) {
     child.on("exit", function(code) {
       var success = (code === 0);
       var callback = success ? deferred.resolve : deferred.reject;
-      var log = success ? grunt.log.ok : grunt.log.error;
-      log("Exited with code: " + code + ".");
       callback(success, code);
     });
 
@@ -37,6 +35,11 @@ module.exports = function(grunt) {
   grunt.registerTask("feature:start", "Start new feature <name>, optionally basing it on <base> instead of develop.", function(name, base) {
     var flags = this.options({ flags: null }).flags;
     flow("feature start", this.async(), [flags, name, base]);
+  });
+
+  grunt.registerTask("feature:list", "List existing features", function() {
+    var flags = this.options({ flags: null }).flags;
+    flow("feature list", this.async(), [flags]);
   });
 
   grunt.registerTask("feature:finish", "Finish feature <name>", function(name) {
