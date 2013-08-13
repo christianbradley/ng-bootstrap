@@ -2,7 +2,11 @@
   "name": "itrain-angular",
   "private": true,
   "description": "Angular version of the iTrain application",
-  "version": "0.1.4",
+  "author": "Christian Bradley <christian.bradley@bocodigital.com>",
+  "version": "0.1.5",
+  "scripts": {
+    "test": "grunt test"
+  },
   "devDependencies": {
     "grunt-cli": "~0.1.9",
     "bower": "~1.1.1",
