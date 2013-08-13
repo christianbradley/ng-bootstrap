@@ -103,7 +103,7 @@ module.exports = function(grunt) {
     var command = flow("release start v" + bumped);
 
     exec(command, this.async());
-    grunt.task.run("bump:minor");
+    grunt.task.run("bump:patch");
   });
 
   // Create a new major release
@@ -112,11 +112,8 @@ module.exports = function(grunt) {
     var bumped = semver.inc(currentVersion, 'minor');
     var command = flow("release start v" + bumped);
 
-    exec(command, function(success) {
-      if(success) {
-        grunt.task.run("bump:minor");
-      } else { return false; }
-    });
+    exec(command, this.async());
+    grunt.task.run("bump:minor");
   });
 
   // Create a new major release
@@ -125,11 +122,8 @@ module.exports = function(grunt) {
     var bumped = semver.inc(currentVersion, 'major');
     var command = flow("release start v" + bumped);
 
-    exec(command, function(success) {
-      if(success) {
-        grunt.task.run("bump:major");
-      } else { return false; }
-    });
+    exec(command, this.async());
+    grunt.task.run("bump:major");
   });
 
   // Finish the current release
