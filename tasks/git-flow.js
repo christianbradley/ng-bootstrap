@@ -39,6 +39,11 @@ module.exports = function(grunt) {
     flow("feature start", this.async(), [flags, name, base]);
   });
 
+  grunt.registerTask("feature:list", "List existing features", function() {
+    var flags = this.options({ flags: null }).flags;
+    flow("feature list", this.async(), [flags]);
+  });
+
   grunt.registerTask("feature:finish", "Finish feature <name>", function(name) {
     this.requires("build");
     var flags = this.options({ flags: null }).flags;

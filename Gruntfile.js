@@ -57,9 +57,16 @@ module.exports = function(grunt) {
     }
   };
 
-  config.feature = {
-    rebase: { flags: "-i" } 
-  }
+  config["feature:list"] = { options: { flags: "-v" } };
+  config["feature:start"] = { options: { flags: "-F" } };
+  config["feature:finish"] = { options: { flags: "-F" } };
+  config["release:list"] = { options: { flags: "-v" } };
+  config["release:start"] = { options: { flags: "-F" } };
+  config["release:finish"] = { options: { flags: "-F -p" } };
+  config["hotfix:list"] = { options: { flags: "-v" } };
+  config["hotfix:start"] = { options: { flags: "-F" } };
+  config["hotfix:finish"] = { options: { flags: "-Fp" } };
+
 
   grunt.initConfig(config);
 
