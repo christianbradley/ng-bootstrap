@@ -13,33 +13,61 @@ module.exports = function(grunt) {
     child.on("exit", function(code) {
       var success = (code === 0);
       var callback = success ? deferred.resolve : deferred.reject;
-      callback(code);
+      var log = success ? grunt.log.ok : grunt.log.error;
+      log("Exited with code: " + code + ".");
+      callback(success, code);
     });
 
     return deferred.promise;
   }
 
-  grunt.registerTask("feature:start", "Start feature :name", function(name) {
-    var options = this.options({ fetch: false });
-    var command = "git";
-    var args = ["flow", "feature", "start"];
-    var done = this.async();
+  function flow(command, done, args) {
+    var args = args || [];
 
-    // Set up arguments
-    if(options.fetch) { args.push("-F"); }
-    if(name) { args.push(name); }
+    args = ["flow"].
+      concat(command.split(" ")).
+      concat(args).
+      filter(function(value) { return typeof value !== 'undefined' && value !== null; });
 
-    function success(code) {
-      grunt.log.ok("Exited with status: " + code);
-      done(true);
-    }
+    exec("git", args).then(done, done);
+  }
 
-    function failure(code) {
-      grunt.log.error("Exited with status: " + code);
-      done(false);
-    }
+  // Start a feature
+  grunt.registerTask("feature:start", "Start new feature <name>, optionally basing it on <base> instead of develop.", function(name, base) {
+    var flags = this.options({ flags: null }).flags;
+    flow("feature start", this.async(), [flags, name, base]);
+  });
 
-    exec(command, args).then(success, failure);
+  grunt.registerTask("feature:finish", "Finish feature <name>", function(name) {
+    this.requires("build");
+    var flags = this.options({ flags: null }).flags;
+    flow("feature finish", this.async(), [flags, name]);
+  });
+
+  grunt.registerTask("feature:publish", "Start sharing feature <name> on $ORIGIN", function(name) {
+    this.requires("build");
+    flow("feature publish", this.async(), [name]);
+  });
+
+  grunt.registerTask("feature:track", "Start tracking feature <name> that is shared on $ORIGIN", function(name) {
+    flow("feature track", this.async(), [name]);
+  });
+
+  grunt.registerTask("feature:diff", "Show all changes in <name> that are not in develop", function(name) {
+    flow("feature diff", this.async(), [name]);
+  });
+
+  grunt.registerTask("feature:rebase", "Rebase <name> on develop.", function(name) {
+    var flags = this.options({ flags: null }).flags;
+    flow("feature rebase", this.async(), [flags, name]);
+  });
+
+  grunt.registerTask("feature:checkout", "Switch to feature branch <name>", function(name) {
+    flow("feature checkout", this.async(), [name]);
+  });
+
+  grunt.registerTask("feature:pull", "Pull feature from <remote> with name <name>", function(remote, name) {
+    flow("feature pull", this.async(), [remote, name]);
   });
 
 };
