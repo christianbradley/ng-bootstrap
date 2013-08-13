@@ -143,7 +143,7 @@ module.exports = function(grunt) {
 
   // Track a remote release
   grunt.registerTask("release:track", "Track a release published to $ORIGIN", function(version) {
-    if(typeof name === 'undefined') {
+    if(typeof version === 'undefined') {
       grunt.log.error("Specify release name: release:track:v1.1.0");
       return false;
     }
