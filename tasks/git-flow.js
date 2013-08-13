@@ -28,14 +28,14 @@ module.exports = function(grunt) {
       return false;
     }
 
-    var command = flow("feature start -F " + name);
+    var command = flow("feature start " + name);
     exec(command, this.async());
   });
 
-  // Finish the current feature
+  // Finish the current feature : TODO
   grunt.registerTask("feature:finish", "Finish the current git flow feature", function() {
     this.requires("build");
-    var command = flowCurrent("feature finish -F");
+    var command = flowCurrent("feature finish");
     exec(command, this.async());
   });
 
@@ -43,6 +43,13 @@ module.exports = function(grunt) {
   grunt.registerTask("feature:publish", "Publish the current git flow feature to $ORIGIN", function() {
     this.requires("build");
     var command = flowCurrent("feature publish");
+    exec(command, this.async());
+  });
+
+  // Push the current feature
+  grunt.registerTask("feature:push", "Push changes you made in this feature to $ORIGIN", function() {
+    this.requires("build");
+    var command = "git push origin";
     exec(command, this.async());
   });
 
@@ -68,7 +75,7 @@ module.exports = function(grunt) {
 
   // Pull a remote feature
   grunt.registerTask("feature:pull", "Pull remote changes made to the current feature", function() {
-    var command = flowCurrent("feature pull " + name);
+    var command = flowCurrent("feature pull origin ");
     exec(command, this.async());
   });
 
@@ -81,7 +88,9 @@ module.exports = function(grunt) {
   // Rebase current feature on develop
   grunt.registerTask("feature:rebase", "Rebase current feature onto develop", function() {
     var command = flowCurrent("feature rebase -i");
-    exec(command, this.async());
+    grunt.log.warn("Cannot run interactive rebase through grunt.");
+    grunt.log.ok("Execute the following from your terminal:");
+    grunt.log.writeln(command);
   });
 
   // RELEASE
@@ -91,7 +100,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release:patch", "Start a new patch version release", function() {
     this.requires("build");
     var bumped = semver.inc(currentVersion, 'patch');
-    var command = flow("release start -F v" + bumped);
+    var command = flow("release start v" + bumped);
 
     exec(command, function(success) {
       if(success) {
@@ -104,7 +113,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release:minor", "Start a new minor version release", function() {
     this.requires("build");
     var bumped = semver.inc(currentVersion, 'minor');
-    var command = flow("release start -F v" + bumped);
+    var command = flow("release start v" + bumped);
 
     exec(command, function(success) {
       if(success) {
@@ -117,7 +126,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release:major", "Start a new major version release", function() {
     this.requires("build");
     var bumped = semver.inc(currentVersion, 'major');
-    var command = flow("release start -F v" + bumped);
+    var command = flow("release start v" + bumped);
 
     exec(command, function(success) {
       if(success) {
@@ -130,7 +139,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release:finish", "Finish the current release", function() {
     this.requires("build");
     var message = "Released version " + currentVersion;
-    var command = flowCurrent('release finish -Fp -m "' + msg + '"');
+    var command = flowCurrent('release finish -p -m "' + msg + '"');
     exec(command, this.async());
   });
 
@@ -162,7 +171,7 @@ module.exports = function(grunt) {
       return false;
     }
 
-    var command = flow("hotfix start -F " + version);
+    var command = flow("hotfix start " + version);
     if(typeof base !== 'undefined') { command += " " + base; }
     exec(command, this.async());
   });
@@ -170,7 +179,7 @@ module.exports = function(grunt) {
   // Finish a hotfix
   grunt.registerTask("hotfix:finish", "Finish the current hotfix", function() {
     var msg = "Hotfix version: " + currentVersion;
-    var command = flowCurrent('hotfix finish -Fp -m "'+msg+'"');
+    var command = flowCurrent('hotfix finish -p -m "'+msg+'"');
     exec(command, this.async());
   });
 
