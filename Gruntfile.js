@@ -89,8 +89,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-connect');
   grunt.loadNpmTasks('grunt-exec');
 
-  grunt.registerTask('build', ['jshint', 'jsonlint', 'htmlhint', 'karma']);
-  grunt.registerTask('test', ['karma']);
+  grunt.registerTask('build', ['test']);
+  grunt.registerTask('lint', ['jshint', 'jsonlint', 'htmlhint']);
+  grunt.registerTask('test', ['lint', 'karma']);
   grunt.registerTask('default', ['build']);
 
 };
