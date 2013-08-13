@@ -1,55 +1,15 @@
 module.exports = function(grunt) {
 
-  var cp = require("child_process"),
-    semver = require('semver'),
-    f = require('util').format,
-    log = grunt.log,
-    verbose = grunt.verbose,
-    _ = grunt.util._,
-    execOptions = {};
+  var semver = require('semver');
+  var exec = grunt.config.get('exec');
+  var currentVersion = grunt.config.get('pkg.version');
 
-  /**
-   * Execute a command in a child process and report results to grunt
-   * @param {string} command - the command to execute
-   * @param {function} done - the current task's async "done" function
-   * @returns {object} childProcess - the childProcess created
-   */
-  function execute(command, done) {
-    verbose.subhead(command);
-
-    var proc = cp.exec(command);
-
-    proc.stdout.on('data', function(d) { log.write(d); });
-    proc.stderr.on('data', function(d) { log.error(d); });
-
-    proc.on('exit', function(code) {
-      var msg = f("Exited with code: %d.", code);
-      var success = (code === 0);
-      var logger = success ? verbose.ok : log.error;
-
-      logger(msg);
-      return done(success);
-    });
-
-    return proc;
-  }
-
-  /**
-   * Create a git flow command
-   * @param {string} name - the git flow command to execute
-   * @param {...string} args - additional arguments for git flow
-   * @returns {string} A git flow command
-   */
+  // Create a git flow command
   function flow(command) {
     return "git flow " + command;
   }
 
-  /**
-   * Pass the current feature/hotfix/release name to a git flow command
-   * @param {string} name - the git flow command to execute
-   * @param {...string} args - additional arguments for git flow
-   * @returns {string} A git flow command, pre bound to the current branch
-   */
+  // Pass the current feature/hotfix/release name to a git flow command
   function flowCurrent(command) {
     return [
       "git rev-parse --abbrev-ref HEAD",
@@ -58,105 +18,164 @@ module.exports = function(grunt) {
     ].join(" | ");
   }
 
-  /**
-   * Hotfix, Feature, and Releases all support:
-   * - start
-   * - finish
-   * - current:finish
-   */
-  _.each(["hotfix", "feature", "release"], function(target) {
+  // FEATURE
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    // Start a {feature|hotfix|release} by name
-    grunt.registerTask(["flow", target, "start"].join(":"), function(name) {
-      var done = this.async();
-      var command = flow(target + " start " + name);
-      if(name) {
-        execute(command, this.async());
-      } else {
-        log.error("No name/version specified");
-        done(false);
-      }
-    });
-
-    // Finish a {feature|hotfix|release} by name
-    grunt.registerTask(["flow", target, "finish"].join(":"), function(name) {
-      this.requires("build");
-      var command = flow(target + " finish " + name);
-
-      if(name) {
-        execute(command, this.async());
-      } else {
-        log.error("No name/version specified");
-        done(false);
-      }
-    });
-
-    // Finish the current {feature|hotfix|release}
-    grunt.registerTask(["flow", target, "current", "finish"].join(":"), function() {
-      this.requires("build");
-      var command = flowCurrent(target + " finish");
-      execute(command, this.async());
-    });
-
-  });
-
-  function startBumpRelease(bumpType) {
-    return function() {
-      this.requiresConfig('pkg.version');
-      var version = grunt.config.get('pkg.version');
-
-      if(!semver.valid(version)) {
-        log.error("Invalid version in package: " + version);
-        return false;
-      }
-
-      var bumped = semver.inc(version, bumpType);
-      var command = flow("release start v" + bumped);
-
-      execute(command, function(success) {
-        if(!success) { return false; }
-        grunt.task.run("bump:" + bumpType);
-      });
-    };
-  }
-
-  grunt.registerTask("flow:release:patch:start", startBumpRelease('patch'));
-  grunt.registerTask("flow:release:minor:start", startBumpRelease('minor'));
-  grunt.registerTask("flow:release:major:start", startBumpRelease('major'));
-
-  /**
-   * Features and Releases each support
-   * - publish
-   * - current:publish
-   */
-  _.each(["feature", "release"], function(target) {
-
-    grunt.registerTask(["flow", target, "publish"].join(":"), function(name) {
-      var command = flow(target + " publish " + name);
-
-      if(name) {
-        execute(command, this.async());
-      } else {
-        log.error("No name/version specified");
-        done(false);
-      }
-    });
-
-    grunt.registerTask(["flow", target, "current", "publish"].join(":"), function() {
-      var command = flowCurrent(target + " publish");
-      execute(command, this.async());
-    });
-
-  });
-
-  grunt.registerTask("flow:feature:pull", function(name) {
-    var command = flow("feature pull" + name);
-    if(name) {
-      execute(command, this.async());
-    } else {
-      log.error("No name/version specified");
-      done(false);
+  // Start a feature
+  grunt.registerTask("feature:start", function(name) {
+    if(typeof name === 'undefined') {
+      grunt.log.error("Specify feature name: feature:start:my-feature");
+      return false;
     }
+
+    var command = flow("feature start -F " + name);
+    exec(command, this.async());
+  });
+
+  // Finish the current feature
+  grunt.registerTask("feature:finish", function() {
+    this.requires("build");
+    var command = flowCurrent("feature finish -F");
+    exec(command, this.async());
+  });
+
+  // Publish the current feature
+  grunt.registerTask("feature:publish", function() {
+    this.requires("build");
+    var command = flowCurrent("feature publish");
+    exec(command, this.async());
+  });
+
+  // Track a feature
+  grunt.registerTask("feature:track", function(name) {
+    if(typeof name === "undefined") {
+      grunt.log.error("Specify feature name: feature:track:remote-feature");
+      return false;
+    }
+    var command = flow("feature track " + name);
+    exec(command, this.async());
+  });
+
+  // Checkout a local feature
+  grunt.registerTask("feature:checkout", function(name) {
+    if(typeof name === "undefined") {
+      grunt.log.error("Specify feature name: feature:checkout:other-feature");
+      return false;
+    }
+    var command = flow("feature checkout " + name);
+    exec(command, this.async());
+  });
+
+  // Pull a remote feature
+  grunt.registerTask("feature:pull", function(name) {
+    if(typeof name === "undefined") {
+      grunt.log.error("Specify feature name: feature:pull:remote-feature");
+      return false;
+    }
+    var command = flow("feature pull " + name);
+    exec(command, this.async());
+  });
+
+  // Show differences between feature and develop
+  grunt.registerTask("feature:diff", function() {
+    var command = flowCurrent("feature diff");
+    exec(command, this.async());
+  });
+
+  // Rebase current feature on develop
+  grunt.registerTask("feature:rebase", function() {
+    var command = flowCurrent("feature rebase -i");
+    exec(command, this.async());
+  });
+
+  // RELEASE
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  // Create a new patch release
+  grunt.registerTask("release:patch", function() {
+    this.requires("build");
+    var bumped = semver.inc(currentVersion, 'patch');
+    var command = flow("release start -F v" + bumped);
+
+    exec(command, function(success) {
+      if(success) {
+        grunt.task.run("bump:patch");
+      } else { return false; }
+    });
+  });
+
+  // Create a new major release
+  grunt.registerTask("release:minor", function() {
+    this.requires("build");
+    var bumped = semver.inc(currentVersion, 'minor');
+    var command = flow("release start -F v" + bumped);
+
+    exec(command, function(success) {
+      if(success) {
+        grunt.task.run("bump:minor");
+      } else { return false; }
+    });
+  });
+
+  // Create a new major release
+  grunt.registerTask("release:major", function() {
+    this.requires("build");
+    var bumped = semver.inc(currentVersion, 'major');
+    var command = flow("release start -F v" + bumped);
+
+    exec(command, function(success) {
+      if(success) {
+        grunt.task.run("bump:major");
+      } else { return false; }
+    });
+  });
+
+  // Finish the current release
+  grunt.registerTask("release:finish", function() {
+    this.requires("build");
+    var message = "Released version " + currentVersion;
+    var command = flowCurrent('release finish -Fp -m "' + msg + '"');
+    exec(command, this.async());
+  });
+
+  // Publish the current release
+  grunt.registerTask("release:publish", function() {
+    this.requires("build");
+    var command = flowCurrent("release publish");
+    exec(command, this.async());
+  });
+
+  // Track a remote release
+  grunt.registerTask("release:track", function(version) {
+    if(typeof name === 'undefined') {
+      grunt.log.error("Specify release name: release:track:v1.1.0");
+      return false;
+    }
+
+    var command = flow("release track " + version);
+    exec(command, this.async());
+  });
+
+  // HOTFIX
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  // Start a hotfix
+  grunt.registerTask("hotfix:start", function(version, base) {
+    if(typeof version === 'undefined') {
+      grunt.log.error("Specify version name: hotfix:start:v1.1.0");
+      return false;
+    }
+
+    var command = flow("hotfix start -F " + version);
+    if(typeof base !== 'undefined') { command += " " + base; }
+    exec(command, this.async());
+  });
+
+  // Finish a hotfix
+  grunt.registerTask("hotfix:finish", function() {
+    var msg = "Hotfix version: " + currentVersion;
+    var command = flowCurrent('hotfix finish -Fp -m "'+msg+'"');
+    exec(command, this.async());
   });
 
 };
