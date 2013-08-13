@@ -57,6 +57,27 @@ module.exports = function(grunt) {
     }
   };
 
+  config["feature:list"] = { options: { flags: ["--verbose"] } };
+  config["feature:start"] = { options: { flags: ["--showcommands", "--fetch"] } };
+  config["feature:finish"] = { options: { flags: ["--showcommands", "--nokeep"] } };
+  config["feature:publish"] = { options: { flags: ["--showcommands"] } };
+  config["feature:track"] = { options: { flags: ["--showcommands"] } };
+  config["feature:diff"] = { options: { flags: ["--showcommands"] } };
+  config["feature:rebase"] = { options: { flags: ["--showcommands"] } };
+  config["feature:checkout"] = { options: { flags: ["--showcommands"] } };
+  config["feature:pull"] = { options: { flags: ["--showcommands"] } };
+
+  config["release:list"] = { options: { flags: ["--verbose"] } };
+  config["release:start"] = { options: { flags: ["--fetch --showcommands"] } };
+  config["release:finish"] = { options: { flags: ["--showcommands", "--fetch", "--push"] } };
+  config["release:publish"] = { options: { flags: ["--showcommands"] } };
+  config["release:track"] = { options: { flags: ["--showcommands"] } };
+
+  config["hotfix:list"] = { options: { flags: ["--verbose"] } };
+  config["hotfix:start"] = { options: { flags: ["--fetch --showcommands"] } };
+  config["hotfix:finish"] = { options: { flags: ["--showcommands", "--fetch", "--push"] } };
+  config["hotfix:publish"] = { options: { flags: ["--showcommands"] } };
+
   grunt.initConfig(config);
 
   grunt.loadTasks('tasks');
