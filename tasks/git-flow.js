@@ -129,7 +129,7 @@ module.exports = function(grunt) {
   // Finish the current release
   grunt.registerTask("release:finish", "Finish the current release", function() {
     this.requires("build");
-    var message = "Released version " + currentVersion;
+    var msg = "Released version " + currentVersion;
     var command = flowCurrent('release finish -p -m "' + msg + '"');
     exec(command, this.async());
   });
