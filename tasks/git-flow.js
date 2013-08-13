@@ -67,14 +67,8 @@ module.exports = function(grunt) {
   });
 
   // Pull a remote feature
-  grunt.registerTask("feature:pull", "Pull remote changes made to the current feature", function(name) {
-
-    if(typeof name === "undefined") {
-      grunt.log.error("Specify remote feature name: feature:pull:origin/other-feature");
-      return false;
-    }
-
-    var command = flow("feature pull " + name);
+  grunt.registerTask("feature:pull", "Pull remote changes made to the current feature", function() {
+    var command = flowCurrent("feature pull origin ");
     exec(command, this.async());
   });
 
