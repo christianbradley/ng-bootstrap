@@ -3,7 +3,7 @@
   "private": true,
   "description": "Angular version of the iTrain application",
   "author": "Christian Bradley <christian.bradley@bocodigital.com>",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "scripts": {
     "test": "grunt test"
   },
